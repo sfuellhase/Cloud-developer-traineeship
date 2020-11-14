@@ -1,12 +1,17 @@
 import random
 
+with open('woorden.txt', 'rt') as bestand_met_woorden:
+    woordenlijst = bestand_met_woorden.readlines()
+    # Strip alle newlines aan het woordeinde
+    woordenlijst = [woord.rstrip() for woord in lijst_met_woorden]
+
 # Print het aantaal woorden in een lijst met woorden
-def print_aantal_woorden(woordenlijst):
+def print_aantal_woorden():
     aantaal_woorden = len(woordenlijst)
     print(f'Er staan {aantaal_woorden} woorden op je lijst.')
 
 # Print alle woorden met het grootste aantaal letters
-def print_langste_woorden(woordenlijst):
+def print_langste_woorden():
     max_letters = 0
     woorden = []
     for woord in woordenlijst:
@@ -38,14 +43,14 @@ def is_palindroom(a):
         return False
 
 # Print alle palindromen
-def print_palindromen(woordenlijst):
+def print_palindromen():
     print('Je palindromen zijn:')
     for woord in woordenlijst:
         if is_palindroom(woord):
             print(woord)
 
 # Print alle woorden die 'omgekeerd' ook voorkomen in de lijst
-def print_omkeerbaar(woordenlijst):
+def print_omkeerbaar():
     # maak een lijst van alle omgekeerde woorden
     woordenlijst_omgekeerd = [keer_string_om(woord) for woord in woordenlijst]
     # check welke woorden zowel in de orspronkelijke als de 
@@ -57,7 +62,7 @@ def print_omkeerbaar(woordenlijst):
 
 # Check of een ingevoerd woord voorkomt in de lijst, of als 
 # onderdeel van woorden. Print alle deze woorden
-def vind_woorden_met(woordenlijst):
+def vind_woorden_met():
     invoer = input('Welk woord wil je zoeken?: ')
     if invoer == '':
         print("Tsts. Alle woorden inhouden een lege string")
@@ -78,7 +83,7 @@ def zijn_anagrammen(a, b):
 
 # Print alle woorden die je kunt maken van de letters van een 
 # ingevoerd string
-def print_anagrammen(woordenlijst):
+def print_anagrammen():
     invoer = input('Van wel woord wil je de anagrammen vinden?: ')
     anagrammen = []
     for woord in woordenlijst:
@@ -95,9 +100,9 @@ def argmax(lijst):
     return lijst.index(max(lijst))
 
 # Splitst een woord in een lijst van lettergrepen
-def lettergrepen(woord, woordenlijst):
+def lettergrepen(woord):
     # Als het een samengesteld woord is
-    deelwoorden_tupel = deelwoorden(woord, woordenlijst)
+    deelwoorden_tupel = deelwoorden(woord)
     print('deelworden:', deelwoorden_tupel)
     lettergrepen_lijst = []
     for deelwoord in deelwoorden_tupel:
@@ -105,10 +110,10 @@ def lettergrepen(woord, woordenlijst):
     print(lettergrepen_lijst)
 
 # Vind alle deelwoorden van een samengesteld woord
-def deelwoorden(woord, woordenlijst):
+def deelwoorden(woord):
     # Maak een lijst van alle mogelijke deelwoorden. (Ze moeten langer dan 4 letters zijn, 
     # anders krijg je te veel nonsensical matches)
-    lange_woorden = get_lange_woorden(5, woordenlijst)
+    lange_woorden = get_lange_woorden(5)
     # Maak een lijst van woorden die aan het eind van het gegeven woord voorkomen
     kandidaten = []
     for lijst_woord in lange_woorden:
@@ -116,7 +121,7 @@ def deelwoorden(woord, woordenlijst):
             kandidaten.append(lijst_woord)
     # probeer het woord zonder 's' aan het eind
     if len(kandidaten) == 0 and woord.endswith('s'):
-        deelwoorden_met_s = deelwoorden(woord[:-1], woordenlijst)
+        deelwoorden_met_s = deelwoorden(woord[:-1])
         deelwoorden_met_s[-1] += 's'
         return deelwoorden_met_s
     # Als alleen het orspronkelijke woord in de kandidatenlijst voorkomt geef het onveranderd terug
@@ -128,8 +133,8 @@ def deelwoorden(woord, woordenlijst):
         if woord in kandidaten:
             kandidaten.remove(woord)
         langste_woord =  max(kandidaten, key=len)
-        deel_1 = deelwoorden(woord[:-len(langste_woord)], woordenlijst)
-        deel_2 = deelwoorden(langste_woord, woordenlijst)
+        deel_1 = deelwoorden(woord[:-len(langste_woord)])
+        deel_2 = deelwoorden(langste_woord)
         return deel_1 + deel_2
 
 # Splits een niet-samengesteld woord in lettergrepen
@@ -182,7 +187,7 @@ def rijmen(a, b):
     pass
 
 # Print alle woorden uit de lijst die rijmen op een ingevoerd woord
-def print_rijmen(woordenlijst):
+def print_rijmen():
     invoer = input('Op welk woord zal ik je rijmen vinden?: ')
     while not invoer.isalpha():
         invoer = input('Je hebt geen woord ingetypt. Probeer het nog een keer: ')
@@ -190,10 +195,10 @@ def print_rijmen(woordenlijst):
     heel erg ingewikkeld. Daarom moet je je rijmen zelf verzinnen''')
         
 # Geeft een lijst van alle woorden in de woordenlijst die minstens aantaal_letters letters lang zijn
-def get_lange_woorden(aantaal_letters, woordenlijst):
+def get_lange_woorden(aantaal_letters):
     return [woord for woord in woordenlijst if len(woord)>=aantaal_letters]
 
-def raadspel(woordenlijst):
+def raadspel():
     invoer = input('''-------------------------------------------------
     Welkom bij mijn raadspel. Ik ga een woord verzinnen en jij moet het raden.
     Als je het woord weet mag je het intypen en enter drukken. Als je geen 
@@ -203,7 +208,7 @@ def raadspel(woordenlijst):
     while not invoer.isnumeric():
         invoer = input('Voer alsjeblieft een integer tussen 1 en 46 in: ')
     # maak een lijst van alle woorden die lang genoeg zijn
-    lange_woorden = get_lange_woorden(int(invoer), woordenlijst)
+    lange_woorden = get_lange_woorden(int(invoer))
     # kies toevallig een woord
     oplossing = lange_woorden[random.randint(0, len(lange_woorden))]
     
@@ -228,27 +233,24 @@ def raadspel(woordenlijst):
     
 
 
-with open('woorden.txt', 'rt') as bestand_met_woorden:
-    lijst_met_woorden = bestand_met_woorden.readlines()
-    # Strip alle newlines aan het woordeinde
-    lijst_met_woorden = [woord.rstrip() for woord in lijst_met_woorden]
+
     
 
-#print_aantal_woorden(lijst_met_woorden)
-#print_langste_woorden(lijst_met_woorden)
-#print_palindromen(lijst_met_woorden)
-#print_omkeerbaar(lijst_met_woorden)
-#vind_woorden_met(lijst_met_woorden)
-#print_anagrammen(lijst_met_woorden)
-#print_rijmen(lijst_met_woorden)
-#raadspel(lijst_met_woorden)
-#lettergrepen('moeten', lijst_met_woorden)
-#lettergrepen('venster', lijst_met_woorden)
-#lettergrepen('enclave', lijst_met_woorden)
-#lettergrepen('obstinaat', lijst_met_woorden)
-#lettergrepen('geschiedenis', lijst_met_woorden)
-#lettergrepen('autobandventieldopjesfabriek', lijst_met_woorden)
-#lettergrepen('waarom',lijst_met_woorden)
-#lettergrepen('kitesurfen', lijst_met_woorden)
-#lettergrepen('intimideren', lijst_met_woorden)
-lettergrepen('arbeidsongeschiktheidsverzekeringsmaatschappij', lijst_met_woorden)
+#print_aantal_woorden()
+#print_langste_woorden()
+#print_palindromen()
+#print_omkeerbaar()
+#vind_woorden_met()
+#print_anagrammen()
+#print_rijmen()
+#raadspel()
+#lettergrepen('moeten')
+#lettergrepen('venster')
+#lettergrepen('enclave')
+#lettergrepen('obstinaat')
+#lettergrepen('geschiedenis')
+#lettergrepen('autobandventieldopjesfabriek')
+#lettergrepen('waarom')
+#lettergrepen('kitesurfen')
+#lettergrepen('intimideren')
+lettergrepen('arbeidsongeschiktheidsverzekeringsmaatschappij')
